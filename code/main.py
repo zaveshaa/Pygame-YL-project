@@ -73,6 +73,7 @@ camera_x, camera_y = 0, 0
 
 while running:
     screen.fill(SKY_BLUE)
+<<<<<<< HEAD
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -105,6 +106,43 @@ while running:
             current_block_type -= 1
             if current_block_type < 1:
                 current_block_type = len(BLOCK_TYPES) - 1
+=======
+    try:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                grid_x = (mouse_x + camera_x) // TILE_SIZE
+                grid_y = (mouse_y + camera_y) // TILE_SIZE
+
+                if 0 <= grid_x < world_width and 0 <= grid_y < world_height:
+                    player_grid_x = player.x // TILE_SIZE
+                    player_grid_y = player.y // TILE_SIZE
+                    if abs(grid_x - player_grid_x) <= VISIBILITY_RADIUS and abs(grid_y - player_grid_y) <= VISIBILITY_RADIUS:
+                        if event.button == 1:
+                            world[grid_y][grid_x] = 0
+                        elif event.button == 3:
+                            if world[grid_y][grid_x] == 0:
+                                world[grid_y][grid_x] = current_block_type
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
+                current_block_type += 1
+                if current_block_type > len(BLOCK_TYPES) - 1:
+                    current_block_type = 1
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
+                current_block_type -= 1
+                if current_block_type < 1:
+                    current_block_type = len(BLOCK_TYPES) - 1
+    except:
+        # print("жопа")
+        print("")
+>>>>>>> fbfca30 (First commit)
 
     if not paused:
         keys = pygame.key.get_pressed()
