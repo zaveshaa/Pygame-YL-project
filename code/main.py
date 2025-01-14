@@ -106,7 +106,6 @@ while running:
                 if current_block_type < 1:
                     current_block_type = len(BLOCK_TYPES) - 1
     except:
-        # print("жопа")
         print("")
 
     if not paused:
