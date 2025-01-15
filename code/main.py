@@ -57,6 +57,7 @@ BLOCK_TYPES = {
 
 current_block_type = 1
 
+
 def check_collision(rect, dx, dy):
     future_rect = rect.move(dx, dy)
     for y in range(world_height):
@@ -66,6 +67,7 @@ def check_collision(rect, dx, dy):
                 if future_rect.colliderect(tile_rect):
                     return True
     return False
+
 
 running = True
 clock = pygame.time.Clock()
@@ -90,7 +92,8 @@ while running:
                 if 0 <= grid_x < world_width and 0 <= grid_y < world_height:
                     player_grid_x = player.x // TILE_SIZE
                     player_grid_y = player.y // TILE_SIZE
-                    if abs(grid_x - player_grid_x) <= VISIBILITY_RADIUS and abs(grid_y - player_grid_y) <= VISIBILITY_RADIUS:
+                    if abs(grid_x - player_grid_x) <= VISIBILITY_RADIUS and abs(
+                            grid_y - player_grid_y) <= VISIBILITY_RADIUS:
                         if event.button == 1:
                             world[grid_y][grid_x] = 0
                         elif event.button == 3:
