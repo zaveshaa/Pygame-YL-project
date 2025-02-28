@@ -2,16 +2,13 @@ import pygame
 import os
 from main_menu import main_menu
 
-# Инициализация Pygame
 pygame.init()
 
-# Настройки экрана
 WIDTH, HEIGHT = 800, 600
 TILE_SIZE = 40
 GRAVITY = 1
 VISIBILITY_RADIUS = 5
 
-# Цвета
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (100, 100, 100)
@@ -28,25 +25,21 @@ DARK_BLUE = (25, 25, 112)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Terraria Clone")
 
-# Загрузка карты
 with open("map.txt", "r") as file:
     world = [list(map(int, line.strip())) for line in file if line.strip()]
 
 world_height = len(world)
 world_width = len(world[0]) if world_height > 0 else 0
 
-# Игрок
 player = pygame.Rect(40, 30, TILE_SIZE, TILE_SIZE)
 player_color = (0, 255, 0)
 player_speed = 5
 player_velocity_y = 0
 is_jumping = False
 
-# Пауза и текущий блок
 paused = False
 current_block_type = 1
 
-# Загрузка текстур
 textures = {
     1: pygame.image.load(os.path.join('textures', 'dirt.png')).convert_alpha(),
     2: pygame.image.load(os.path.join('textures', 'stone.png')).convert_alpha(),
@@ -69,18 +62,17 @@ lava_frames = [
     for i in range(1, 4)  # lava_1.png, lava_2.png, lava_3.png
 ]
 
-# Масштабирование текстур
 for key in textures:
-    if key == 5:  # Вода
+    if key == 5:  
         textures[5] = [pygame.transform.scale(frame, (TILE_SIZE, TILE_SIZE)) for frame in water_frames]
-    elif key == 9:  # Лава
+    elif key == 9: 
         textures[9] = [pygame.transform.scale(frame, (TILE_SIZE, TILE_SIZE)) for frame in lava_frames]
     elif textures[key]:
         textures[key] = pygame.transform.scale(textures[key], (TILE_SIZE, TILE_SIZE))
 
 # Таймер для анимации
 animation_frame = 0
-animation_speed = 10  # Скорость анимации (чем меньше, тем быстрее)
+animation_speed = 10 
 
 # Функция проверки коллизий
 def check_collision(rect, dx, dy):
@@ -93,11 +85,9 @@ def check_collision(rect, dx, dy):
                     return True
     return False
 
-# Функция интерполяции цвета
 def interpolate_color(color1, color2, factor):
     return tuple(int(color1[i] + (color2[i] - color1[i]) * factor) for i in range(3))
 
-# Функция отображения экрана "Game Over"
 def game_over_screen():
     while True:
         screen.fill(BLACK)
@@ -105,7 +95,6 @@ def game_over_screen():
         text = font.render("Game Over", True, RED)
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
 
-        # Подсказка для перезапуска
         font_small = pygame.font.SysFont(None, 36)
         restart_text = font_small.render("Press R to Restart", True, WHITE)
         screen.blit(restart_text, (WIDTH // 2 - restart_text.get_width() // 2, HEIGHT // 2 + 50))
@@ -117,10 +106,9 @@ def game_over_screen():
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:  # Перезапуск игры при нажатии R
+                if event.key == pygame.K_r:  
                     return True
 
-# Основной игровой цикл
 def game_loop():
     player_velocity_y = 0
     global paused, current_block_type, animation_frame
@@ -191,20 +179,17 @@ def game_loop():
                 elif dy < 0:
                     player_velocity_y = 0
 
-            # Проверка на достижение нижней границы карты
             if player.y >= world_height * TILE_SIZE:
-                if game_over_screen():  # Если игрок нажал R, перезапускаем игру
-                    # Сброс состояния игры
+                if game_over_screen(): 
                     player.x, player.y = 40, 30
                     player_velocity_y = 0
                     is_jumping = False
-                    continue  # Продолжаем игровой цикл
+                    continue  
                 else:
-                    running = False  # Выход из игры
+                    running = False  
 
-        # Обновление анимации
         animation_frame += 1
-        if animation_frame >= animation_speed * len(textures[5]):  # Сброс счетчика анимации
+        if animation_frame >= animation_speed * len(textures[5]):
             animation_frame = 0
 
         camera_x = player.x - WIDTH // 2 + TILE_SIZE // 2
@@ -265,7 +250,6 @@ def game_loop():
 
     pygame.quit()
 
-# Запуск игры
 if __name__ == "__main__":
     result = main_menu()
     if result == "singleplayer":

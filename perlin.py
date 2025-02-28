@@ -41,8 +41,7 @@ def generate_map(width, height, air_layers, cave_threshold, second_layer_height,
 
     return world
 
-# Генерируем случайное начальное значение
-seed = random.randint(0, 10000)  # Вы можете изменить диапазон по своему усмотрению
+seed = random.randint(0, 10000)  
 
 world = generate_map(WIDTH, HEIGHT, AIR_LAYERS, CAVE_THRESHOLD, SECOND_LAYER_HEIGHT, seed)
 
