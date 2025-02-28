@@ -3,17 +3,17 @@ import json
 
 pygame.init()
 
-WIDTH, HEIGHT = 1600, 1200  
-TILE_SIZE = 20 
+WIDTH, HEIGHT = 1600, 1200
+TILE_SIZE = 20
 BLOCK_TYPES = {
-    0: None,           # Empty
-    1: (139, 69, 19),  # Brown
-    2: (100, 100, 100), # Gray
-    3: (0, 255, 0),    # Green
-    4: (0, 0, 255),    # Blue
-    5: (210, 180, 140),# Sandy Brown
-    6: (192, 192, 192),# Silver
-    7: (255, 0, 0),    # Red
+    0: None,
+    1: (139, 69, 19),
+    2: (100, 100, 100),
+    3: (0, 255, 0),
+    4: (0, 0, 255),
+    5: (210, 180, 140),
+    6: (192, 192, 192),
+    7: (255, 0, 0),
 }
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -27,11 +27,9 @@ world = [[0 for _ in range(world_width)] for _ in range(world_height)]
 current_block_type = 1
 is_dragging = False
 
-# Fonts
 font = pygame.font.SysFont(None, 36)
 
 def draw_map():
-    """Draw the entire map on the screen."""
     for y in range(world_height):
         for x in range(world_width):
             block_color = BLOCK_TYPES.get(world[y][x])
@@ -39,7 +37,6 @@ def draw_map():
                 pygame.draw.rect(screen, block_color, (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
 def save_map():
-    """Save the current world map to a file."""
     with open("map.txt", "w") as file:
         for row in world:
             file.write("".join(str(cell) for cell in row) + "\n")
@@ -54,16 +51,25 @@ while running:
             running = False
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_p:
-
-                current_block_type += 1
-                if current_block_type > len(BLOCK_TYPES) - 1:
-                    current_block_type = 1
+            if event.key == pygame.K_1:
+                current_block_type = 1
+            if event.key == pygame.K_2:
+                current_block_type = 2
+            if event.key == pygame.K_3:
+                current_block_type = 3
+            if event.key == pygame.K_4:
+                current_block_type = 4
+            if event.key == pygame.K_5:
+                current_block_type = 5
+            if event.key == pygame.K_6:
+                current_block_type = 6
+            if event.key == pygame.K_7:
+                current_block_type = 7
 
             if event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
                 ctrl_pressed = True
 
-            if event.key == pygame.K_s and ctrl_pressed:  # Save map on Ctrl + S
+            if event.key == pygame.K_s and ctrl_pressed:
                 save_map()
 
         if event.type == pygame.KEYUP:
@@ -75,12 +81,12 @@ while running:
             grid_x = mouse_x // TILE_SIZE
             grid_y = mouse_y // TILE_SIZE
 
-            if event.button == 1:  
+            if event.button == 1:
                 if 0 <= grid_x < world_width and 0 <= grid_y < world_height:
                     world[grid_y][grid_x] = current_block_type
                     is_dragging = True
 
-            if event.button == 3: 
+            if event.button == 3:
                 if 0 <= grid_x < world_width and 0 <= grid_y < world_height:
                     world[grid_y][grid_x] = 0
                     is_dragging = True
